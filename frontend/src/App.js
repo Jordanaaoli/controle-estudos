@@ -6,6 +6,13 @@ function App() {
   const [subjectName, setSubjectName] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
   const [duration, setDuration] = useState('');
+  const [summary, setSummary] = useState([]);
+
+  async function loadSummary() {
+  const response = await fetch('http://localhost:3000/summary');
+  const data = await response.json();
+  setSummary(data);
+  }
 
   async function loadSubjects() {
     const response = await fetch('http://localhost:3000/subjects');
@@ -20,9 +27,10 @@ function App() {
   }
 
   useEffect(() => {
-    loadSubjects();
-    loadSessions();
-  }, []);
+  loadSubjects();
+  loadSessions();
+  loadSummary();
+}, []);
 
   async function handleCreateSubject(e) {
     e.preventDefault();
@@ -35,6 +43,7 @@ function App() {
 
     setSubjectName('');
     loadSubjects();
+    loadSummary();
   }
 
   async function handleCreateSession(e) {
@@ -52,6 +61,7 @@ function App() {
     setSelectedSubject('');
     setDuration('');
     loadSessions();
+    loadSummary();
   }
 
   return (
@@ -170,6 +180,15 @@ function App() {
           Registrar
         </button>
       </form>
+
+      <h2>Resumo por matéria</h2>
+      <ul style={{ paddingLeft: '20px', marginBottom: '24px' }}>
+        {summary.map((item) => (
+          <li key={item.id} style={{ marginBottom: '6px' }}>
+            {item.name} — {item.total_minutes} minutos estudados
+          </li>
+        ))}
+      </ul>
 
       <h2>Sessões registradas</h2>
       <ul style={{ paddingLeft: '20px' }}>

@@ -24,10 +24,19 @@ app.get('/subjects', async (req, res) => {
 
 app.post('/subjects', async (req, res) => {
   try {
-    const { name } = req.body;
+    const name = req.body.name?.trim();
 
     if (!name) {
       return res.status(400).json({ error: 'O nome da matéria é obrigatório' });
+    }
+
+    const existing = await pool.query(
+      'SELECT * FROM subjects WHERE LOWER(name) = LOWER($1)',
+      [name]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.status(400).json({ error: 'Matéria já existe' });
     }
 
     const result = await pool.query(
@@ -83,6 +92,24 @@ app.get('/sessions', async (req, res) => {
   }
 });
 
+app.get('/summary', async (req, res) => {
+  try {
+    const result = await pool.query(`
+  SELECT
+    sub.name,
+    COALESCE(SUM(s.duration), 0) AS total_minutes
+  FROM subjects sub
+  LEFT JOIN study_sessions s ON s.subject_id = sub.id
+  GROUP BY sub.name
+  ORDER BY sub.name ASC
+`);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao buscar resumo de estudos' });
+  }
+});
 app.listen(3000, () => {
   console.log('Servidor rodando na porta 3000');
 });
