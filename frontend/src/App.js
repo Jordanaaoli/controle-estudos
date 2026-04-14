@@ -55,46 +55,87 @@ function App() {
   }
 
   return (
-    <div style={{
-  padding: '32px',
-  fontFamily: 'Arial',
-  maxWidth: '600px',
-  margin: '0 auto'
-}}>
-      <h1>Controle de Estudos</h1>
+  <div
+    style={{
+      minHeight: '100vh',
+      backgroundColor: '#f5f7fb',
+      padding: '32px 16px',
+      fontFamily: 'Arial, sans-serif',
+    }}
+  >
+    <div
+      style={{
+        maxWidth: '700px',
+        margin: '0 auto',
+        backgroundColor: '#ffffff',
+        padding: '24px',
+        borderRadius: '16px',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+      }}
+    >
+      <h1 style={{ marginBottom: '24px', textAlign: 'center' }}>
+        Controle de Estudos
+      </h1>
 
       <h2>Cadastrar matéria</h2>
-      <form onSubmit={handleCreateSubject}>
+      <form
+        onSubmit={handleCreateSubject}
+        style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}
+      >
         <input
-          style={{ marginRight: '8px', padding: '8px' }}
           type="text"
           placeholder="Nome da matéria"
           value={subjectName}
           onChange={(e) => setSubjectName(e.target.value)}
+          style={{
+            flex: 1,
+            padding: '10px',
+            borderRadius: '8px',
+            border: '1px solid #ccc',
+          }}
         />
-        
-        <button 
-        type="submit" 
-        style={{ padding: '8px 12px', cursor: 'pointer' }}
->
-          Salvar matéria
+        <button
+          type="submit"
+          style={{
+            padding: '10px 16px',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+          }}
+        >
+          Salvar
         </button>
       </form>
 
       <h2>Matérias</h2>
-      <ul>
+      <ul style={{ paddingLeft: '20px', marginBottom: '24px' }}>
         {subjects.map((subject) => (
-          <li key={subject.id}>
-            {subject.id} - {subject.name}
+          <li key={subject.id} style={{ marginBottom: '6px' }}>
+            {subject.name}
           </li>
         ))}
       </ul>
 
       <h2>Registrar sessão de estudo</h2>
-      <form onSubmit={handleCreateSession}>
+      <form
+        onSubmit={handleCreateSession}
+        style={{
+          display: 'flex',
+          gap: '8px',
+          flexWrap: 'wrap',
+          marginBottom: '24px',
+        }}
+      >
         <select
           value={selectedSubject}
           onChange={(e) => setSelectedSubject(e.target.value)}
+          style={{
+            flex: 1,
+            minWidth: '200px',
+            padding: '10px',
+            borderRadius: '8px',
+            border: '1px solid #ccc',
+          }}
         >
           <option value="">Selecione uma matéria</option>
           {subjects.map((subject) => (
@@ -109,26 +150,38 @@ function App() {
           placeholder="Duração em minutos"
           value={duration}
           onChange={(e) => setDuration(e.target.value)}
+          style={{
+            width: '180px',
+            padding: '10px',
+            borderRadius: '8px',
+            border: '1px solid #ccc',
+          }}
         />
 
-        <button 
-        type="submit" 
-        style={{ padding: '8px 12px', cursor: 'pointer' }}
->
-          Salvar sessão
+        <button
+          type="submit"
+          style={{
+            padding: '10px 16px',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+          }}
+        >
+          Registrar
         </button>
       </form>
 
       <h2>Sessões registradas</h2>
-      <ul>
+      <ul style={{ paddingLeft: '20px' }}>
         {sessions.map((session) => (
-          <li key={session.id}>
-            {session.subject_name} - {session.duration} minutos
+          <li key={session.id} style={{ marginBottom: '6px' }}>
+            {session.subject_name} — {session.duration} minutos
           </li>
         ))}
       </ul>
     </div>
-  );
+  </div>
+);
 }
 
 export default App;
